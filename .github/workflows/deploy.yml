@@ -6,26 +6,26 @@ on:
       - main
   workflow_dispatch:
 
-  inputs:
-    stage:
-      type: choice
-      default: "dev"
-      description: select the env
-      options:
-        - "dev"
-        - "stage"
+inputs:
+  stage:
+    type: choice
+    default: "dev"
+    description: select the env
+    options:
+      - "dev"
+      - "stage"
 
-    aws_region:
-      type: choice
-      default: "ap-south-1"
-      description: aws region name
-      options:
-        - "ap-south-1"
-        - "ap-south-2"
+  aws_region:
+    type: choice
+    default: "ap-south-1"
+    description: aws region name
+    options:
+      - "ap-south-1"
+      - "ap-south-2"
 
 env:
-  STAGE: ${{ inputs.stage }}
-  AWS_REGION: ${{ inputs.aws_region }} # set this to your preferred AWS region, e.g. ap-south-1
+  STAGE: ${{ github.event.inputs.stage }}
+  AWS_REGION: ${{ github.event.inputs.aws_region }} # set this to your preferred AWS region, e.g. ap-south-1
 
 permissions:
   contents: read
