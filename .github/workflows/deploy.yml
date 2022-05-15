@@ -24,8 +24,8 @@ on:
         - "ap-south-2"
 
 env:
-  STAGE: ${{ github.event.inputs.stage }}
-  AWS_REGION: ${{ github.event.inputs.aws_region }} # set this to your preferred AWS region, e.g. ap-south-1
+  STAGE: ${{ inputs.stage }}
+  AWS_REGION: ${{ inputs.aws_region }} # set this to your preferred AWS region, e.g. ap-south-1
 
 permissions:
   contents: read
