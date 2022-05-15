@@ -7,20 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        type: choice
-        default: "dev"
         description: select the env
-        options:
-          - "dev"
-          - "stage"
+        required: true
+        default: "dev"
 
       aws_region:
-        type: choice
-        default: "ap-south-1"
         description: aws region name
-        options:
-          - "ap-south-1"
-          - "ap-south-2"
+        required: true
+        default: "ap-south-1"
 
 env:
   STAGE: ${{ github.event.inputs.stage }}
