@@ -1,0 +1,57 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      stage:
+        type: choice
+        default: dev
+        description: select the env
+        options:
+          - dev
+          - stage
+
+      aws_region:
+        type: choice
+        default: ap-south-1
+        description: aws region name
+        options:
+          - ap-south-1
+          - ap-south-2
+
+env:
+  STAGE: ${{ github.event.inputs.name }}
+  AWS_REGION: ${{ github.event.inputs.name }} # set this to your preferred AWS region, e.g. ap-south-1
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install chalice
+
+      - name: Chalice deploy
+        run: chalice deploy --stage ${{ env.STAGE }}
