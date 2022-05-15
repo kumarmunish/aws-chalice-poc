@@ -4,24 +4,34 @@ on:
   push:
     branches:
       - main
+    inputs:
+      stage:
+        description: select the env
+        required: true
+        default: "dev"
+
+      aws_region:
+        description: aws region name
+        required: true
+        default: "ap-south-1"
+
   workflow_dispatch:
+    inputs:
+      stage:
+        type: choice
+        default: "dev"
+        description: select the env
+        options:
+          - "dev"
+          - "stage"
 
-inputs:
-  stage:
-    type: choice
-    default: "dev"
-    description: select the env
-    options:
-      - "dev"
-      - "stage"
-
-  aws_region:
-    type: choice
-    default: "ap-south-1"
-    description: aws region name
-    options:
-      - "ap-south-1"
-      - "ap-south-2"
+      aws_region:
+        type: choice
+        default: "ap-south-1"
+        description: aws region name
+        options:
+          - "ap-south-1"
+          - "ap-south-2"
 
 env:
   STAGE: ${{ github.event.inputs.stage }}
