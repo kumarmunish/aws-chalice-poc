@@ -5,16 +5,23 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      stage:
-        description: select the env
-        required: true
-        default: "dev"
 
-      aws_region:
-        description: aws region name
-        required: true
-        default: "ap-south-1"
+  inputs:
+    stage:
+      type: choice
+      default: "dev"
+      description: select the env
+      options:
+        - "dev"
+        - "stage"
+
+    aws_region:
+      type: choice
+      default: "ap-south-1"
+      description: aws region name
+      options:
+        - "ap-south-1"
+        - "ap-south-2"
 
 env:
   STAGE: ${{ github.event.inputs.stage }}
@@ -31,11 +38,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: print env variables
-        run: |
-          echo ${{ env.STAGE }}
-          echo ${{ env.AWS_REGION }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
