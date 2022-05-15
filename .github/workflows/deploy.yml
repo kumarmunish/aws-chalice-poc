@@ -32,6 +32,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: print env variables
+        run: |
+          echo ${{ env.STAGE }}
+          echo ${{ env.AWS_REGION }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
