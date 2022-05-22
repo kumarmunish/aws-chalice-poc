@@ -101,7 +101,7 @@ jobs:
 
       - name: Chalice deploy
         #run: chalice deploy --stage ${{ env.STAGE }}
-        run: echo ${{ env.STAGE }}
+        run: ech ${{ env.STAGE }}
         
       - name: Deployment Success Notification
         if: ${{ success() }}
