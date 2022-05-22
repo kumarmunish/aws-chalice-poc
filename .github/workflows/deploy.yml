@@ -33,7 +33,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
 
     env:
-      STAGE: "dev"
+      STAGE: "stage"
       AWS_REGION: "ap-south-1"
 
     steps:
@@ -81,14 +81,46 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Set up Python 3.9
+      - name: Set up Python 3.7
         uses: actions/setup-python@v3
         with:
-          python-version: "3.9"
+          python-version: "3.7"
       - name: Install dependencies
         run: |
           python -m pip install chalice
+          
+      - name: Deployment Triggered Notification
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          payload: |
+            {
+              "text": "Deployment Triggered on env: ${{ env.STAGE }} :rocket:"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Chalice deploy
         #run: chalice deploy --stage ${{ env.STAGE }}
         run: echo ${{ env.STAGE }}
+        
+      - name: Deployment Success Notification
+        if: ${{ success() }}
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          payload: |
+            {
+              "text": "Deployed Successfully on env: ${{ env.STAGE }} :white_check_mark:"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Deployment Failure Notification
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          payload: |
+            {
+              "text": "Deployment Failed on env: ${{ env.STAGE }} :x:"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
